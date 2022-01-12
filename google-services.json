@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "746847397434",
+    "project_id": "sambong-market",
+    "storage_bucket": "sambong-market.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746847397434:android:dfc2f12e7bd1d6d3a97703",
+        "android_client_info": {
+          "package_name": "com.android.dimassdoubles.sambongmarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746847397434-i0r9epca49ij8cb2fj81an5kodp0j746.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.dimassdoubles.sambongmarket",
+            "certificate_hash": "221fe4da90a47e8f057ec62c9e97b8e5494dbc2c"
+          }
+        },
+        {
+          "client_id": "746847397434-45ar3711uk6kk5ftdrsajtis5hggvk2d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1YdxphYX5vBE-s1JRroRXdrngwXvsg3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746847397434-45ar3711uk6kk5ftdrsajtis5hggvk2d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
