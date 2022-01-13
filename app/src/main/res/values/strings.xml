@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Sambong Market</string>
-<!--    <string name="default_web_client_id">746847397434-45ar3711uk6kk5ftdrsajtis5hggvk2d.apps.googleusercontent.com</string>-->
+    <!--    <string name="default_web_client_id">746847397434-45ar3711uk6kk5ftdrsajtis5hggvk2d.apps.googleusercontent.com</string>-->
+    <string name="facebook_app_id">260010759525811</string>
+    <string name="fb_login_protocol_scheme">3ae7a059fcd983cb1b6ba7de1bdb582a</string>
+
 </resources>

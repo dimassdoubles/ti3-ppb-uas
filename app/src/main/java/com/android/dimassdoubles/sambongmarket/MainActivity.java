@@ -1,9 +1,5 @@
 package com.android.dimassdoubles.sambongmarket;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +7,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -22,7 +32,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private CallbackManager callbackManager;
     private String email, password;
     EditText inputEmail, inputPassword;
     Button btnLogin, btnDaftar;
     TextView loginGoogle, loginFb;
-    SignInButton btnGoogleSignIn, btnFbSignIn;
+    SignInButton btnGoogleSignIn;
+    LoginButton btnFbSignIn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +64,29 @@ public class MainActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        callbackManager = CallbackManager.Factory.create();
+
         inputEmail = findViewById(R.id.inputEmail);
         inputPassword = findViewById(R.id.inputPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnDaftar = findViewById(R.id.btnDaftar);
         btnGoogleSignIn = findViewById(R.id.googleSignIn);
+        btnFbSignIn = findViewById(R.id.fbLogin);
+
+        btnFbSignIn.setReadPermissions(Arrays.asList("email","public_profile"));
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+            }
+        };
+
+        ProfileTracker profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+
+            }
+        };
 
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -76,6 +108,24 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+        btnFbSignIn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Intent intent = new Intent (MainActivity.this, DashboardActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(MainActivity.this, "Proses Login Dibatalkan", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(MainActivity.this, "Proses Login Gagal", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -90,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -160,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
 //            updateUI(null);
         }
     }
+
 
 //    private void updateUI(FirebaseUser user) {
 //        hideProgressDialog();
