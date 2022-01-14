@@ -6,9 +6,10 @@ public class ProdukItem {
     String deskripsi;
     int harga;
     String gambar;
+    int jumlah_pesan;
 
     ProdukItem() {
-
+        this.jumlah_pesan = 0;
     };
 
     public int getId_produk() {
@@ -49,5 +50,17 @@ public class ProdukItem {
 
     public void setGambar(String gambar) {
         this.gambar = gambar;
+    }
+
+    public int getJumlah_pesan() {
+        return jumlah_pesan;
+    }
+
+    public void setJumlah_pesan(int jumlah_pesan) {
+        this.jumlah_pesan = jumlah_pesan;
+    }
+
+    public void tambah_pesanan() {
+        this.jumlah_pesan += 1;
     }
 }

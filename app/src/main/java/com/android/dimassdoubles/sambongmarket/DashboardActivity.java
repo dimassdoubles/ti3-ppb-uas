@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,15 +31,18 @@ public class DashboardActivity extends AppCompatActivity {
     private ArrayList<ProdukItem> listProduk;
     private RecyclerView mRecyclerView;
     private ProdukAdapter mAdapter;
-    public static int totalHarga = 0;
-    public static String deskripsiPesanan = "";
+    public static int totalHarga;
     public static Button btnTotal;
+
+    public static ArrayList<ProdukItem> listPesanan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        totalHarga = 0;
+        listPesanan = new ArrayList<ProdukItem>();
         new ReadTask().execute();
     }
 
@@ -154,7 +158,8 @@ public class DashboardActivity extends AppCompatActivity {
             btnTotal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(DashboardActivity.this, CheckoutActivity.class);
+                    startActivity(intent);
                 }
             });
 
@@ -163,15 +168,12 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     // method untuk menambahkan total
-    public static void tambah_total(String nama_produk, int harga_produk) {
-        deskripsiPesanan += nama_produk + ", ";
+    public static void tambah_total(int harga_produk) {
         totalHarga += harga_produk;
         btnTotal.setText("Total = Rp " + String.format(Locale.GERMAN, "%,d", totalHarga));
-        Log.d(TAG, "tambah_total: " + deskripsiPesanan);
     }
 
     public static void reset_pesanan() {
-        deskripsiPesanan = "";
         totalHarga = 0;
         btnTotal.setText("Total = Rp " + String.format(Locale.GERMAN, "%,d", totalHarga));
     }

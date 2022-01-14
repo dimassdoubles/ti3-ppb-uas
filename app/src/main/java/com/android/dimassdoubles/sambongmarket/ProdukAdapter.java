@@ -51,7 +51,6 @@ public class ProdukAdapter extends RecyclerView.Adapter<ProdukAdapter.ProdukView
             imgProduk = (ImageView) itemView.findViewById(R.id.imgProduk);
             tvNama = (TextView) itemView.findViewById(R.id.tvNama);
             tvHarga = (TextView) itemView.findViewById(R.id.tvHarga);
-
         }
     }
 
@@ -99,7 +98,13 @@ public class ProdukAdapter extends RecyclerView.Adapter<ProdukAdapter.ProdukView
         holder.imgProduk.setOnClickListener(new MyButtonOnClickListener(currentId, currentNama, currentDeskripsi, currentHarga, currentGambar) {
             @Override
             public void onClick(View v) {
-                DashboardActivity.tambah_total(nama_produk, harga);
+                DashboardActivity.tambah_total(harga);
+                ProdukItem produkDiklik = listProduk.get(h.getAdapterPosition());
+                if (produkDiklik.getJumlah_pesan() == 0) {
+                    DashboardActivity.listPesanan.add(produkDiklik);
+                }
+                produkDiklik.tambah_pesanan();
+                Log.d(TAG, "onClick: " + listProduk.get((h.getAdapterPosition())).getNama_produk() + " dipesan " + listProduk.get((h.getAdapterPosition())).getJumlah_pesan() + " kali");
             }
         });
     }
