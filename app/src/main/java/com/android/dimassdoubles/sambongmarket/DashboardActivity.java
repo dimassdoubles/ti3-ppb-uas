@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -20,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -30,6 +32,9 @@ public class DashboardActivity extends AppCompatActivity {
     private ArrayList<ProdukItem> listProduk;
     private RecyclerView mRecyclerView;
     private ProdukAdapter mAdapter;
+    public static int totalHarga = 0;
+    public static String deskripsiPesanan;
+    public static Button btnTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +42,7 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         mRecyclerView = findViewById(R.id.recyclerView);
-
-
+        btnTotal = findViewById(R.id.btnTotal);
 
         new ReadTask().execute();
     }
@@ -149,6 +153,16 @@ public class DashboardActivity extends AppCompatActivity {
 
             // give RecyclerView a default layout manager
             mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
+
+
         }
+    }
+
+    // method untuk menambahkan total
+    public static void tambah_total(String nama_produk, int harga_produk) {
+        deskripsiPesanan += nama_produk + ", ";
+        totalHarga += harga_produk;
+        btnTotal.setText("Total = Rp " + String.format(Locale.GERMAN, "%,d", totalHarga));
+        Log.d(TAG, "tambah_total: " + deskripsiPesanan);
     }
 }

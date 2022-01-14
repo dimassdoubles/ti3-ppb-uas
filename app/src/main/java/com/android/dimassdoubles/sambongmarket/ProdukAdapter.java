@@ -95,6 +95,13 @@ public class ProdukAdapter extends RecyclerView.Adapter<ProdukAdapter.ProdukView
                 ((Activity) mContext).startActivity(intent);
             }
         });
+
+        holder.imgProduk.setOnClickListener(new MyButtonOnClickListener(currentId, currentNama, currentDeskripsi, currentHarga, currentGambar) {
+            @Override
+            public void onClick(View v) {
+                DashboardActivity.tambah_total(nama_produk, harga);
+            }
+        });
     }
 
     @Override
