@@ -33,16 +33,13 @@ public class DashboardActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ProdukAdapter mAdapter;
     public static int totalHarga = 0;
-    public static String deskripsiPesanan;
+    public static String deskripsiPesanan = "";
     public static Button btnTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        mRecyclerView = findViewById(R.id.recyclerView);
-        btnTotal = findViewById(R.id.btnTotal);
 
         new ReadTask().execute();
     }
@@ -141,6 +138,8 @@ public class DashboardActivity extends AppCompatActivity {
             super.onPostExecute(unused);
             Log.d(TAG, "onPostExecute: " + listProduk.get(0).getNama_produk());
             Log.d(TAG, "onPostExecute: " + listProduk.get(1).getNama_produk());
+
+            btnTotal = findViewById(R.id.btnTotal);
 
             // Create recycler view
             mRecyclerView = findViewById(R.id.recyclerView);
