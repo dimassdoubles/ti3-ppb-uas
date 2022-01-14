@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,9 +26,6 @@ import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-
-//    public static final int REQUEST_EDIT = 1;
-//    public static int REQUEST_ADD = -1;
 
     private ArrayList<ProdukItem> listProduk;
     private RecyclerView mRecyclerView;
@@ -153,6 +151,13 @@ public class DashboardActivity extends AppCompatActivity {
             // give RecyclerView a default layout manager
             mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
 
+            btnTotal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
 
         }
     }
@@ -163,5 +168,11 @@ public class DashboardActivity extends AppCompatActivity {
         totalHarga += harga_produk;
         btnTotal.setText("Total = Rp " + String.format(Locale.GERMAN, "%,d", totalHarga));
         Log.d(TAG, "tambah_total: " + deskripsiPesanan);
+    }
+
+    public static void reset_pesanan() {
+        deskripsiPesanan = "";
+        totalHarga = 0;
+        btnTotal.setText("Total = Rp " + String.format(Locale.GERMAN, "%,d", totalHarga));
     }
 }
