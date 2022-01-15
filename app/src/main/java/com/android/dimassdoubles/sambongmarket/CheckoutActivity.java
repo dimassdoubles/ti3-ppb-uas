@@ -20,7 +20,7 @@ public class CheckoutActivity extends AppCompatActivity {
     public static TextView tvTotalPesanan, tvOngkir, tvTotalBayar;
     RecyclerView mRecyclerView;
     PesananAdapter mAdapter;
-    Button btnOngkir;
+    Button btnOngkir, btnCheckout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class CheckoutActivity extends AppCompatActivity {
         tvOngkir = findViewById(R.id.tvOngkir);
         tvTotalBayar = findViewById(R.id.tvTotalBayar);
         btnOngkir = findViewById(R.id.btnOngkir);
+        btnCheckout = findViewById(R.id.btnCheckout);
 
         tvTotalPesanan.setText("Rp " + String.format(Locale.GERMAN, "%,d", DashboardActivity.totalHarga));
         tvTotalBayar.setText("Rp " + String.format(Locale.GERMAN, "%,d", DashboardActivity.totalHarga));
@@ -46,6 +47,16 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CheckoutActivity.this, CekOngkirActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int totalBayar = DashboardActivity.totalHarga + totalOngkir;
+                Intent intent = new Intent(CheckoutActivity.this, BayarActivity.class);
+                intent.putExtra("total", totalBayar);
                 startActivity(intent);
             }
         });

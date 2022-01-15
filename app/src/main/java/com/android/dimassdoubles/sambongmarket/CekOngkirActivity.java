@@ -526,25 +526,8 @@ public class CekOngkirActivity extends AppCompatActivity {
                         TextView tv_coast = (TextView) alertLayout.findViewById(R.id.tv_coast);
                         TextView tv_time = (TextView) alertLayout.findViewById(R.id.tv_time);
 
-                        tv_origin.setText(response.body().getRajaongkir().getOriginDetails().getCityName()+" (Postal Code : "+
-                                response.body().getRajaongkir().getOriginDetails().getPostalCode()+")");
-
-                        tv_destination.setText(response.body().getRajaongkir().getDestinationDetails().getCityName()+" (Postal Code : "+
-                                response.body().getRajaongkir().getDestinationDetails().getPostalCode()+")");
-
-                        tv_expedisi.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getDescription()+" ("+
-                                response.body().getRajaongkir().getResults().get(0).getName()+") ");
-
-                        tv_coast.setText("Rp. "+response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getValue().toString());
-
-                        tv_time.setText(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getEtd()+" (Days)");
-
-                        etFromProvince.setText("");
-                        etFromCity.setText("");
-                        etToProvince.setText("");
-                        etToCity.setText("");
-                        etWeight.setText("");
-                        etCourier.setText("");
+                        CheckoutActivity.set_ongkir(response.body().getRajaongkir().getResults().get(0).getCosts().get(0).getCost().get(0).getValue());
+                        finish();
                     } else {
 
                         String message = response.body().getRajaongkir().getStatus().getDescription();
