@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,10 +16,11 @@ public class CheckoutActivity extends AppCompatActivity {
     private static final String TAG = CheckoutActivity.class.getSimpleName();
 
 //    int totalHarga = DashboardActivity.totalHarga;
-    int ongkir, totalBayar;
-    TextView tvTotalPesanan, tvOngkir, tvTotalBayar;
+    public static int totalOngkir, totalBayar;
+    public static TextView tvTotalPesanan, tvOngkir, tvTotalBayar;
     RecyclerView mRecyclerView;
     PesananAdapter mAdapter;
+    Button btnOngkir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +32,29 @@ public class CheckoutActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
-        ongkir = 0;
+        totalOngkir = 0;
 
         tvTotalPesanan = findViewById(R.id.tvTotalPesanan);
         tvOngkir = findViewById(R.id.tvOngkir);
         tvTotalBayar = findViewById(R.id.tvTotalBayar);
+        btnOngkir = findViewById(R.id.btnOngkir);
 
         tvTotalPesanan.setText("Rp " + String.format(Locale.GERMAN, "%,d", DashboardActivity.totalHarga));
         tvTotalBayar.setText("Rp " + String.format(Locale.GERMAN, "%,d", DashboardActivity.totalHarga));
 
+        btnOngkir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CheckoutActivity.this, CekOngkirActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    public static void set_ongkir(int ongkir) {
+        totalOngkir = ongkir;
+        tvOngkir.setText("Rp " + String.format(Locale.GERMAN, "%,d", totalOngkir));
+        tvTotalBayar.setText("Rp " + String.format(Locale.GERMAN, "%,d", (DashboardActivity.totalHarga + totalOngkir)));
     }
 }
