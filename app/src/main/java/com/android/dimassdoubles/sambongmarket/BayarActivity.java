@@ -104,6 +104,7 @@ public class BayarActivity extends AppCompatActivity {
                 Log.d(TAG, "onClick: " + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
                 cetakPdf();
                 new insertPesanan().execute();
+
             }
         });
     }
@@ -121,8 +122,9 @@ public class BayarActivity extends AppCompatActivity {
                 deskripsi_pesanan += CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getNama_produk() + " " + CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getJumlah_pesan() + " (" + (CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getJumlah_pesan() * CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getHarga()) + "), ";
                 deskripsi_pesanan += "ongkir (" + getIntent().getIntExtra("ongkir", 0) + ").";
                 Log.d(TAG, "doInBackground: " + deskripsi_pesanan);
+                Log.d(TAG, "doInBackground: " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-                AndroidNetworking.post("http://192.168.43.160/PPB_10/php/penjualan/insert.php")
+                AndroidNetworking.post("https://files.000webhost.com/api/penjualan/insert.php")
                         .addBodyParameter("email_konsumen", FirebaseAuth.getInstance().getCurrentUser().getEmail())
                         .addBodyParameter("deskripsi_pesanan", deskripsi_pesanan)
                         .addBodyParameter("total_pesanan", String.valueOf(totalBayar))
@@ -136,7 +138,7 @@ public class BayarActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(ANError anError) {
-                                Log.d(TAG, "onError: gagal");
+                                Log.d(TAG, "onError: gagal" + anError);
                             }
                         });
 

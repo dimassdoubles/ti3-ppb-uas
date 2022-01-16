@@ -57,7 +57,7 @@ public class DashboardActivity extends AppCompatActivity {
             // httppost
             try {
                 // create a neat value objet to hold the URL
-                URL url = new URL("http://192.168.43.160/PPB_10/php/uas/read.php");
+                URL url = new URL("https://a11202012497.000webhostapp.com/api/produk/read.php");
 
                 // open a connection
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
