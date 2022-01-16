@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class CheckoutActivity extends AppCompatActivity {
@@ -22,10 +23,13 @@ public class CheckoutActivity extends AppCompatActivity {
     PesananAdapter mAdapter;
     Button btnOngkir, btnCheckout;
 
+    public static ArrayList<ProdukItem> listPesanan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+        listPesanan = DashboardActivity.listPesanan;
 
         mRecyclerView = findViewById(R.id.pesananRecyclerView);
         mAdapter = new PesananAdapter(CheckoutActivity.this, DashboardActivity.listPesanan);
@@ -57,6 +61,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 int totalBayar = DashboardActivity.totalHarga + totalOngkir;
                 Intent intent = new Intent(CheckoutActivity.this, BayarActivity.class);
                 intent.putExtra("total", totalBayar);
+                intent.putExtra("ongkir", totalOngkir);
                 startActivity(intent);
             }
         });

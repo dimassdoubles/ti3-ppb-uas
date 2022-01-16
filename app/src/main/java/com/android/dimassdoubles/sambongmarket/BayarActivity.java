@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.loader.content.AsyncTaskLoader;
 
+import android.content.AsyncQueryHandler;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileUtils;
@@ -18,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -31,17 +38,21 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import org.json.JSONObject;
 
 public class BayarActivity extends AppCompatActivity {
     private static final String TAG = BayarActivity.class.getSimpleName();
@@ -92,8 +103,52 @@ public class BayarActivity extends AppCompatActivity {
                 Log.d(TAG, "onClick: #cek 1");
                 Log.d(TAG, "onClick: " + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
                 cetakPdf();
+                new insertPesanan().execute();
             }
         });
+    }
+
+    private class insertPesanan extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Log.d(TAG, "doInBackground: #cek2");
+                String deskripsi_pesanan = "";
+                for (int i=0; i<CheckoutActivity.listPesanan.size()-1; i++) {
+                    deskripsi_pesanan += CheckoutActivity.listPesanan.get(i).getNama_produk() + " " + CheckoutActivity.listPesanan.get(i).getJumlah_pesan() + " (" + (CheckoutActivity.listPesanan.get(i).getJumlah_pesan()*CheckoutActivity.listPesanan.get(i).getHarga()) +"), ";
+                }
+                Log.d(TAG, "doInBackground: #cek3");
+                deskripsi_pesanan += CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getNama_produk() + " " + CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getJumlah_pesan() + " (" + (CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getJumlah_pesan() * CheckoutActivity.listPesanan.get(CheckoutActivity.listPesanan.size() - 1).getHarga()) + "), ";
+                deskripsi_pesanan += "ongkir (" + getIntent().getIntExtra("ongkir", 0) + ").";
+                Log.d(TAG, "doInBackground: " + deskripsi_pesanan);
+
+                AndroidNetworking.post("http://192.168.43.160/PPB_10/php/penjualan/insert.php")
+                        .addBodyParameter("email_konsumen", FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                        .addBodyParameter("deskripsi_pesanan", deskripsi_pesanan)
+                        .addBodyParameter("total_pesanan", String.valueOf(totalBayar))
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d(TAG, "onResponse: berhasil");
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.d(TAG, "onError: gagal");
+                            }
+                        });
+
+            } catch (Exception e) {
+                Log.d(TAG, "doInBackground: #cek1");
+                Log.d(TAG, "doInBackground: " + e.getMessage());
+
+            }
+
+            return null;
+        }
+
     }
 
     private void cetakPdf() {
@@ -258,9 +313,9 @@ public class BayarActivity extends AppCompatActivity {
                 boolean readStorage = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
                 if (writeStorage && readStorage) {
-                    Toast.makeText(this, "Permission Granted..", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Permission Granted..", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Permission Denined.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Permission Denined.", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

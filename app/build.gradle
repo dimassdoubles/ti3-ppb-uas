@@ -62,4 +62,7 @@ dependencies {
 
     // itextpdf
     implementation 'com.itextpdf:itextg:5.5.10'
+
+    // fast android networking
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
 }

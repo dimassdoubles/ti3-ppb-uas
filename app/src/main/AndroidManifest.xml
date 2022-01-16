@@ -17,9 +17,6 @@
         android:theme="@style/Theme.SambongMarket"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".CetakNotaActivity"
-            android:exported="false" />
-        <activity
             android:name=".BayarActivity"
             android:exported="false" />
         <activity
